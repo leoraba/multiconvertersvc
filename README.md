@@ -1,29 +1,34 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+SpringBoot 2.2.4.RELEASE
 
-### What is this repository for? ###
+### URL endpoint ###
+```
+POST http://localhost:8081/converter
+```
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### Headers: Convert XML to JSON ###
 
-### How do I get set up? ###
+* Content-Type: application/xml
+* Accept: application/json
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
 
-### Contribution guidelines ###
+### Headers: Convert XML to CSV ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* Content-Type: application/xml
+* Accept: text/plain
 
-### Who do I talk to? ###
+### Request Body ###
+```
+<root>
+	<node>
+		<var1>My node 1 var1</var1>
+		<var2>My node 1 var2</var2>
+	</node>
+	<node>
+		<var1>My node 2 var1</var1>
+		<var2>My node 2 var2</var2>
+	</node>
+</root>
+```
 
-* Repo owner or admin
-* Other community or team contact
