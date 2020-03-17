@@ -47,15 +47,20 @@ public class MainController {
 		// Input is XML
 		switch (contentType) {
 		case MediaType.APPLICATION_XML_VALUE:
-			XmlFormatter formatter = new XmlFormatter(data);
-			
-			// Check which format convert TO
-			if(MediaType.TEXT_PLAIN_VALUE.equalsIgnoreCase(accept)) {
-				dataResponse = formatter.convertToCSV();
-			}else if(MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(accept)) {
-				dataResponse = formatter.convertToJSON();
+			try {
+				XmlFormatter formatter = new XmlFormatter(data);
+				
+				// Check which format convert TO
+				if(MediaType.TEXT_PLAIN_VALUE.equalsIgnoreCase(accept)) {
+					dataResponse = formatter.convertToCSV();
+				}else if(MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(accept)) {
+					dataResponse = formatter.convertToJSON();
+				}
+				httpResponseStatus = HttpStatus.OK;
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				dataResponse = "XML body is not valid";
 			}
-			httpResponseStatus = HttpStatus.OK;
 			break;
 
 		case MediaType.APPLICATION_JSON_VALUE:
