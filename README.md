@@ -41,16 +41,18 @@ POST http://localhost:8081/converter
 
 ### Response ###
 ```
-[
-    {
-        "var2": "My node 1 var2",
-        "var1": "My node 1 var1"
-    },
-    {
-        "var2": "My node 2 var2",
-        "var1": "My node 2 var1"
-    }
-]
+{
+    "root": [
+        {
+            "var2": "My node 1 var2",
+            "var1": "My node 1 var1"
+        },
+        {
+            "var2": "My node 2 var2",
+            "var1": "My node 2 var1"
+        }
+    ]
+}
 ```
 
 
