@@ -111,15 +111,18 @@ public class XmlFormatter {
 		return builderResponse.toString();
 	}
 	
-	public List<Map<String, String>> convertToJSON() {
+	public Map<String, List<Map<String, String>>> convertToJSON() {
 		
 		logger.debug("Converting to JSON...");
 		
+		Map<String, List<Map<String, String>>> resultWrapper = new HashMap<>();
 		List<Map<String, String>> resultList = new ArrayList<>();
 		
 		int dataRowCnt = 0;
 
 		if(document != null && document.getFirstChild() != null) {
+			
+			String rootDocumentName = document.getFirstChild().getNodeName();
 			
 			for (int children = 0; children < document.getFirstChild().getChildNodes().getLength(); children++) {
 				Node item = document.getFirstChild().getChildNodes().item(children);
@@ -142,10 +145,11 @@ public class XmlFormatter {
 			}
 			
 			logger.debug("resultList: {}, dataRowCnt: {}", resultList, dataRowCnt);
+			resultWrapper.put(rootDocumentName, resultList);
 			
 		}
 		
 		
-		return resultList;
+		return resultWrapper;
 	}
 }
