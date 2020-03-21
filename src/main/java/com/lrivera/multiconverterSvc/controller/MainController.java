@@ -59,7 +59,7 @@ public class MainController {
 				httpResponseStatus = HttpStatus.OK;
 			} catch (Exception e) {
 				logger.error(e.getMessage());
-				dataResponse = "XML body is not valid";
+				dataResponse = "XML body is not valid: " + e.getMessage();
 			}
 			break;
 
@@ -76,7 +76,7 @@ public class MainController {
 				httpResponseStatus = HttpStatus.OK;
 			} catch (Exception e) {
 				logger.error(e.getMessage());
-				dataResponse = "JSON body is not valid";
+				dataResponse = "JSON body is not valid: " + e.getMessage();
 			}
 			break;
 		}

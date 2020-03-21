@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -62,12 +63,13 @@ public class XmlFormatter {
 		StringBuilder builderResponse = new StringBuilder();
 		
 		List<String> titleList = new ArrayList<>();
-		Map<String, List<String>> valueMap = new HashMap<>();
-		int dataRowCnt = 0;
+		Map<String, String[]> valueMap = new HashMap<>();
+		int currentDataRow = 0;
+		int totalNodes = 0;
 		
 		if(document != null && document.getFirstChild() != null) {
-			
-			for (int children = 0; children < document.getFirstChild().getChildNodes().getLength(); children++) {
+			totalNodes = document.getFirstChild().getChildNodes().getLength();
+			for (int children = 0; children < totalNodes; children++) {
 				Node item = document.getFirstChild().getChildNodes().item(children);
 				if(item.hasChildNodes()) {
 					for (int indexChild = 0; indexChild < item.getChildNodes().getLength(); indexChild++) {
@@ -78,34 +80,36 @@ public class XmlFormatter {
 								titleList.add(titleName);
 							}
 							if(valueMap.get(titleName) != null) {
-								List<String> listByTitle = valueMap.get(titleName);
-								listByTitle.add(item2.getFirstChild().getNodeValue());
+								String[] arrayByTitle = valueMap.get(titleName);
+								arrayByTitle[currentDataRow] = item2.getFirstChild().getNodeValue();
 							} else {
-								List<String> listByTitle = new ArrayList<>();
-								listByTitle.add(item2.getFirstChild().getNodeValue());
-								valueMap.put(titleName, listByTitle);
+								String[] arrayByTitle = new String[totalNodes];
+								arrayByTitle[currentDataRow] = item2.getFirstChild().getNodeValue();
+								valueMap.put(titleName, arrayByTitle);
 							}
 						}
 					}
-					dataRowCnt++;
+					currentDataRow++;
 				}
 			}
 			
-			logger.debug("titleList: {}, valueMap: {}, dataRowCnt: {}", titleList, valueMap, dataRowCnt);
+			logger.debug("titleList: {}, valueMap: {}, dataRowCnt: {}", titleList, valueMap, currentDataRow);
 			
 			if(titleList != null) {
+				// First line adding the titles
 				builderResponse.append(titleList.stream().collect(Collectors.joining(",")) + "\n");
 				
-				for(int dataRow = 0; dataRow < dataRowCnt; dataRow++) {
+				for(int dataRow = 0; dataRow < totalNodes; dataRow++) {
 					List<String> row = new ArrayList<>();
 					for (String title : titleList) {
-						List<String> listByTitle = valueMap.get(title);
-						row.add(listByTitle.get(dataRow));
+						String[] arrayByTitle = valueMap.get(title);
+						// Removing NULL values
+						String value = Objects.toString(arrayByTitle[dataRow], "");
+						row.add(value);
 					}
 					builderResponse.append(row.stream().collect(Collectors.joining(",")) + "\n");
 				}
 			}
-			
 		}
 		
 		return builderResponse.toString();
