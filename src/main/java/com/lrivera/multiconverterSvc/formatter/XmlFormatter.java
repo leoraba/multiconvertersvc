@@ -30,26 +30,28 @@ public class XmlFormatter {
 	public XmlFormatter(String data) throws Exception {
 		if(data == null) {
 			throw new Exception("XML data is null");
-		} else {
-			try {
-				data = data.replaceAll(">\\s*<", "><").replaceAll("(\\r|\\n|\\r\\n)+", "").trim();
-				DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-				InputStream inputStream = new ByteArrayInputStream(data.getBytes());
+		}
+		
+		try {
+			
+			//Sanitize data
+			data = data.replaceAll(">\\s*<", "><").replaceAll("(\\r|\\n|\\r\\n)+", "").trim();
+			
+			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			InputStream inputStream = new ByteArrayInputStream(data.getBytes());
 
-				
-				Document document = documentBuilder.parse(inputStream);
-				
-				this.document = document;
-				logger.debug("Document loaded successfully");
-				
-			} catch (ParserConfigurationException e) {
-				throw  e;
-			} catch (SAXException e) {
-				throw e;
-			} catch (IOException e) {
-				throw e;
-			}
+			Document document = documentBuilder.parse(inputStream);
+			
+			this.document = document;
+			logger.debug("XML document loaded successfully");
+			
+		} catch (ParserConfigurationException e) {
+			throw  e;
+		} catch (SAXException e) {
+			throw e;
+		} catch (IOException e) {
+			throw e;
 		}
 	}
 	

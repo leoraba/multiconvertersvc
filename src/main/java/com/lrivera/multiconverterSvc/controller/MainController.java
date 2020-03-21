@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lrivera.multiconverterSvc.formatter.JSONFormatter;
 import com.lrivera.multiconverterSvc.formatter.XmlFormatter;
 
 @RestController
@@ -33,7 +33,7 @@ public class MainController {
 	@PostMapping(
 			path = "/converter", 
 			consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
-			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+			produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public ResponseEntity<Object> converter(
 			@RequestBody String data,
 			@RequestHeader("Content-Type") String contentType,
@@ -42,15 +42,15 @@ public class MainController {
 		HttpStatus httpResponseStatus = HttpStatus.BAD_REQUEST;
 		Object dataResponse = "";
 		
-		logger.info("CONVERTER INPUT from:{}, to:{}, data:{}", contentType, accept, data);
+		logger.info("CONVERTER INPUT from:{}, to:{}", contentType, accept);
 		
-		// Input is XML
 		switch (contentType) {
 		case MediaType.APPLICATION_XML_VALUE:
+			// Input is XML
 			try {
 				XmlFormatter formatter = new XmlFormatter(data);
 				
-				// Check which format convert TO
+				// Check which format to convert
 				if(MediaType.TEXT_PLAIN_VALUE.equalsIgnoreCase(accept)) {
 					dataResponse = formatter.convertToCSV();
 				}else if(MediaType.APPLICATION_JSON_VALUE.equalsIgnoreCase(accept)) {
@@ -65,7 +65,19 @@ public class MainController {
 
 		case MediaType.APPLICATION_JSON_VALUE:
 			// Input is JSON
-			// TODO
+			try {
+				JSONFormatter formatter = new JSONFormatter(data);
+				
+				if(MediaType.APPLICATION_XML_VALUE.equalsIgnoreCase(accept)) {
+					dataResponse = formatter.convertToXml();
+				}else if(MediaType.TEXT_PLAIN_VALUE.equalsIgnoreCase(accept)) {
+					dataResponse = formatter.convertToCSV();
+				}
+				httpResponseStatus = HttpStatus.OK;
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				dataResponse = "JSON body is not valid";
+			}
 			break;
 		}
 		
