@@ -121,22 +121,24 @@ My node 2 var1,My node 2 var2
 
 ### Response ###
 ```
-<document>
-    <description>this is my description 1</description>
-    <title>my Title 1</title>
-</document>
-<document>
-    <description>this is my description 2</description>
-    <title>my Title 2</title>
-</document>
-<document>
-    <description>this is my description 3</description>
-    <title>my Title 3</title>
-</document>
-<document>
-    <description>this is my description 4</description>
-    <title>my Title 4</title>
-</document>
+<root>
+    <document>
+        <description>this is my description 1</description>
+        <title>my Title 1</title>
+    </document>
+    <document>
+        <description>this is my description 2</description>
+        <title>my Title 2</title>
+    </document>
+    <document>
+        <description>this is my description 3</description>
+        <title>my Title 3</title>
+    </document>
+    <document>
+        <description>this is my description 4</description>
+        <title>my Title 4</title>
+    </document>
+</root>
 ```
 
 

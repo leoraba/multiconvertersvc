@@ -36,8 +36,9 @@ public class JSONFormatter {
 	
 	public String convertToXml() {
 		logger.debug("Converting to XML...");
-		
-		return XML.toString(document);
+		JSONObject wrapperDocument = new JSONObject();
+		wrapperDocument.append("root", document);
+		return XML.toString(wrapperDocument);
 	}
 	
 	public String convertToCSV() {
